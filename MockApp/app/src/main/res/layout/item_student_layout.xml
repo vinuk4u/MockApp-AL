@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_source_linearlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:baselineAligned="false"
+    android:gravity="center"
+    tools:context=".activities.MAStudentListActivity" >
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/item_profile_pic_imageview"
+        android:layout_width="@dimen/profile_pic_size"
+        android:layout_height="@dimen/profile_pic_size"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:padding="5dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_contact_picture" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_toRightOf="@id/item_profile_pic_imageview"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
+
+        <TextView
+            android:id="@+id/item_rollno_textview"
+            style="@style/TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="0dp"
+            android:gravity="left|center_vertical" />
+
+        <TextView
+            style="@style/TextView"
+            android:id="@+id/item_name_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="0dp"
+            android:gravity="left|center_vertical"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

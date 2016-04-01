@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MockApp</string>
+
+    <string name="no_internet_connection_available">No Internet connection available</string>
+    <string name="generic_server_down" translatable="false">Server Down</string>
+    <string name="unknown_error">Unknown error</string>
+
+    <string name="no_results">No Results</string>
+    <string name="no_results_swipe_to_refresh">No Results\n\nSwipe down to refresh</string>
+
+    <string name="downloading">Downloading&#8230; Please wait!!!</string>
+
+    <string name="retry">Retry</string>
+
+    <string name="marks">Marks</string>
+
+    <string name="roll_no">Roll No: &#160;</string>
+</resources>

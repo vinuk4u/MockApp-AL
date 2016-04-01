@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".fragments.MAStudentListFragment"
+    tools:showIn="@layout/activity_student_list_layout">
+
+    <SearchView
+        android:id="@+id/students_searchview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.al.mockapp.utils.views.MASwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:cacheColorHint="@color/colorAccent"
+            android:divider="@drawable/listview_divider"
+            android:footerDividersEnabled="false"
+            android:listSelector="@drawable/listview_listselector" />
+
+        <TextView
+            android:id="@android:id/empty"
+            style="@style/TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:singleLine="false"
+            android:text="@string/no_results_swipe_to_refresh" />
+    </com.al.mockapp.utils.views.MASwipeRefreshLayout>
+</LinearLayout>
