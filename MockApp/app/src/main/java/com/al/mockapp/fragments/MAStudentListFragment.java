@@ -78,6 +78,7 @@ public class MAStudentListFragment extends Fragment implements Response.ErrorLis
         setupSwipeRefreshLayout();
 
         mStudentListView.setEmptyView(mEmptyView);
+        mStudentListView.setTextFilterEnabled(true);
 
         setupSearchView();
 
@@ -108,7 +109,7 @@ public class MAStudentListFragment extends Fragment implements Response.ErrorLis
         mStudentsSearchView.setIconifiedByDefault(false);
         mStudentsSearchView.setOnQueryTextListener(this);
         mStudentsSearchView.setSubmitButtonEnabled(true);
-        mStudentsSearchView.setQueryHint("Search");
+        mStudentsSearchView.setQueryHint(getString(R.string.search_student));
 
         hideKeyboard();
     }
@@ -126,6 +127,7 @@ public class MAStudentListFragment extends Fragment implements Response.ErrorLis
 
     private void fetchStudentList() {
         mSwipeRefreshLayout.setRefreshing(false);
+        MAViewUtil.dismissSnackBar();
 
         if (!MANetworkUtil.hasInternetAccess(getActivity())) {
             showJsonResponseErrorSnackbar(null, getString(R.string.no_internet_connection_available));
@@ -203,7 +205,7 @@ public class MAStudentListFragment extends Fragment implements Response.ErrorLis
             // Initialize SimpleSectionAdapter and add custom adapter and
             // sectionizer class
             //MAStudentListSectionizer sectionizer = new MAStudentListSectionizer();
-            mStudentsSectionAdapter = new MAStudentListSimpleSectionAdapter<MAStudentModel>(
+            mStudentsSectionAdapter = new MAStudentListSimpleSectionAdapter<>(
                     getActivity(), mStudentsAdapter, R.layout.student_list_section_layout,
                     R.id.item_student_section_title, new MAStudentListSectionizer());
 
@@ -214,7 +216,8 @@ public class MAStudentListFragment extends Fragment implements Response.ErrorLis
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final int index = mStudentsSectionAdapter.getIndexForPosition(position);
-                    MAStudentHolder.getInstance().setStudentModel(studentList.get(index));
+                    MAStudentHolder.getInstance().setStudentModel(mStudentsAdapter.getItem(index));
+                    //studentList.get(index));
 
                     Intent intent = new Intent(getActivity(), MAStudentDetailActivity.class);
                     Bundle translateBundle = ActivityOptionsCompat
@@ -242,7 +245,12 @@ public class MAStudentListFragment extends Fragment implements Response.ErrorLis
 
     @Override
     public boolean onQueryTextChange(String queryText) {
-        return false;
+        if (TextUtils.isEmpty(queryText)) {
+            mStudentListView.clearTextFilter();
+        } else {
+            mStudentListView.setFilterText(queryText);
+        }
+        return true;
     }
 
     /*

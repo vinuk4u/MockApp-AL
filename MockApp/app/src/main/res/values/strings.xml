@@ -15,4 +15,6 @@
     <string name="marks">Marks</string>
 
     <string name="roll_no">Roll No: &#160;</string>
+
+    <string name="search_student">Search Student&#8230;</string>
 </resources>

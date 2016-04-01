@@ -4,11 +4,17 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.al.mockapp.models.MAStudentModel;
+
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -21,13 +27,13 @@ import java.util.Set;
  * {@link ListView}s.
  */
 public class MAStudentListSimpleSectionAdapter<MAStudentModel> extends BaseAdapter
-        implements SectionIndexer {
+        implements SectionIndexer, Filterable {
     // Constants
     private static final int VIEW_TYPE_SECTION_HEADER = 0;
 
     // Attributes
     private Context mContext;
-    private BaseAdapter mListAdapter;
+    private MAStudentListAdapter mListAdapter;
     private int mSectionLayoutId;
     private int mSectionTitleTextViewId;
     private MAStudentListSectionizer<MAStudentModel> mSectionizer;
@@ -43,7 +49,7 @@ public class MAStudentListSimpleSectionAdapter<MAStudentModel> extends BaseAdapt
     };
 
     public MAStudentListSimpleSectionAdapter(Context context,
-                                             BaseAdapter listAdapter, int sectionLayoutId,
+                                             MAStudentListAdapter listAdapter, int sectionLayoutId,
                                              int sectionTitleTextViewId,
                                              MAStudentListSectionizer<MAStudentModel> sectionizer) {
         if (context == null) {
@@ -266,6 +272,49 @@ public class MAStudentListSimpleSectionAdapter<MAStudentModel> extends BaseAdapt
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {
         mListAdapter.unregisterDataSetObserver(observer);
+    }
+
+    /**
+     * <p>Returns a filter that can be used to constrain data with a filtering
+     * pattern.</p>
+     * <p/>
+     * <p>This method is usually implemented by {@link Adapter}
+     * classes.</p>
+     *
+     * @return a filter used to constrain data
+     */
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults filterResults = new FilterResults();
+                final ArrayList<com.al.mockapp.models.MAStudentModel> results = new ArrayList<com.al.mockapp.models.MAStudentModel>();
+                if (mListAdapter.getStudentsSource() == null)
+                    mListAdapter.setStudentsSource(mListAdapter.getStudents());
+                if (constraint != null) {
+                    if (mListAdapter.getStudentsSource() != null && mListAdapter.getStudentsSource().size() > 0) {
+                        for (final com.al.mockapp.models.MAStudentModel studentModel : mListAdapter.getStudentsSource()) {
+                            if (studentModel.getfName().toLowerCase().contains(constraint.toString()) ||
+                                    studentModel.getlName().toLowerCase().contains(constraint.toString())) {
+                                results.add(studentModel);
+                            }
+                        }
+                    }
+                    filterResults.values = results;
+                }
+                return filterResults;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint,
+                                          FilterResults results) {
+                mListAdapter.setStudents((ArrayList<com.al.mockapp.models.MAStudentModel>) results.values);
+                notifyDataSetChanged();
+            }
+        };
     }
 
     static class SectionHolder {

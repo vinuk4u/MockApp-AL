@@ -6,8 +6,6 @@ import android.util.LruCache;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.al.mockapp.R;
@@ -18,13 +16,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by vineeth on 31/03/16
  */
-public class MAStudentListAdapter extends ArrayAdapter<MAStudentModel> implements Filterable {
+public class MAStudentListAdapter extends ArrayAdapter<MAStudentModel> {
 
     private List<MAStudentModel> studentsSource;
     private Context mContext;
@@ -78,11 +75,13 @@ public class MAStudentListAdapter extends ArrayAdapter<MAStudentModel> implement
         } else {
             viewHolder.mProfilePicNetworkImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_contact_picture));
         }
+
         if (mStudents != null && position < mStudents.size()) {
             if (mStudents.get(position).getProfilePic() != null) {
                 viewHolder.mProfilePicNetworkImageView.setImageUrl(
                         MAFormatUtil.getImageUrl(
                                 mStudents.get((Integer) viewHolder.mProfilePicNetworkImageView.getTag()).getProfilePic()), mImageLoader);
+                viewHolder.mProfilePicNetworkImageView.setTag(position);
             }
 
             viewHolder.mRollNoTextView.setText(mStudents.get(position).getRollNo());
@@ -92,38 +91,6 @@ public class MAStudentListAdapter extends ArrayAdapter<MAStudentModel> implement
         }
 
         return view;
-    }
-
-    public Filter getFilter() {
-        return new Filter() {
-
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults oReturn = new FilterResults();
-                final ArrayList<MAStudentModel> results = new ArrayList<MAStudentModel>();
-                if (studentsSource == null)
-                    studentsSource = mStudents;
-                if (constraint != null) {
-                    if (studentsSource != null && studentsSource.size() > 0) {
-                        for (final MAStudentModel g : studentsSource) {
-                            if (g.getfName().toLowerCase()
-                                    .contains(constraint.toString()))
-                                results.add(g);
-                        }
-                    }
-                    oReturn.values = results;
-                }
-                return oReturn;
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void publishResults(CharSequence constraint,
-                                          FilterResults results) {
-                mStudents = (ArrayList<MAStudentModel>) results.values;
-                notifyDataSetChanged();
-            }
-        };
     }
 
     public void notifyDataSetChanged() {
@@ -143,6 +110,22 @@ public class MAStudentListAdapter extends ArrayAdapter<MAStudentModel> implement
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public List<MAStudentModel> getStudentsSource() {
+        return studentsSource;
+    }
+
+    public void setStudentsSource(List<MAStudentModel> studentsSource) {
+        this.studentsSource = studentsSource;
+    }
+
+    public List<MAStudentModel> getStudents() {
+        return mStudents;
+    }
+
+    public void setStudents(List<MAStudentModel> students) {
+        mStudents = students;
     }
 }
 
